@@ -16,19 +16,14 @@ int getToken()
     if (isalpha(lastChar))
     {
         identifierStr = lastChar;
-        lastChar = getchar();
-        while (isalnum(lastChar))
-        {
+        while (isalnum((lastChar = getchar())))
             identifierStr += lastChar;
-            lastChar = getchar();
-        }
 
         if (identifierStr == "def")
             return Token::DEF;
         if (identifierStr == "extern")
             return Token::EXTERN;
 
-        printf("Is identifier. last char = %c, ascii: %d\n", lastChar, lastChar);
         // Token is a variable name
         return Token::IDENTIFIER;
     }
@@ -56,9 +51,7 @@ int getToken()
         lastChar = getchar();
         static const std::array<char, 3> endTokens = { '\n', '\r', EOF };
         while (std::find(endTokens.begin(), endTokens.end(), lastChar) == endTokens.end())
-        {
             lastChar = getchar();
-        }
 
         if (lastChar != EOF)
             return getToken();
