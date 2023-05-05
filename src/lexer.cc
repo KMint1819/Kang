@@ -1,14 +1,15 @@
-#include "header.hpp"
+#include "lexer.hpp"
 #include <array>
 #include <algorithm>
 
 namespace kang
 {
+int curToken;
 std::string identifierStr = "EMPTY"; // Filled in if tok_identifier
 double numVal = 0.;
 char lastChar = ' ';
 
-int getToken()
+static int getToken()
 {
     while (isspace(lastChar))
         lastChar = getchar();
@@ -64,5 +65,11 @@ int getToken()
     int ascii = lastChar;
     lastChar = getchar();
     return ascii;
+}
+
+int eatToken()
+{
+    curToken = getToken();
+    return curToken;
 }
 } // namespace kang

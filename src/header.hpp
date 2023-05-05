@@ -1,23 +1,47 @@
 #pragma once
-#include <string>
+
+#include <parser.hpp>
 
 namespace kang
 {
-extern std::string identifierStr; // Filled in if tok_identifier
-extern double numVal;
-extern char lastChar;
 
-enum Token
+void handleDef()
 {
-    MY_EOF = -1,
+    if (parseFunction())
+        printf("Parsed a function");
+    else
+        eatToken();
+}
 
-    DEF = -2,
-    EXTERN = -3,
+void handleExtern()
+{
+    if (parseExtern())
+        printf("Parsed an extern");
+    else
+        eatToken();
+}
 
-    IDENTIFIER = -4,
-    NUMBER = -5,
-};
+void handleExpr()
+{
+    if (parseAnonymousFunction())
+        printf("Parsed an anonymous function");
+    else
+        eatToken();
+}
 
-int getToken();
-
+void mainLoop()
+{
+    while (true)
+    {
+        printf("Enter:> ");
+        switch (kang::curToken)
+        {
+        case Token::MY_EOF: return;
+        case ';': eatToken(); break;
+        case Token::DEF: handleDef(); break;
+        case Token::EXTERN: handleExtern(); break;
+        default: handleExpr(); break;
+        }
+    }
+}
 } // namespace kang
