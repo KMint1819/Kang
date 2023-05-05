@@ -8,7 +8,7 @@ namespace kang
 void handleDef()
 {
     if (parseFunction())
-        printf("Parsed a function");
+        printf("Parsed a function\n");
     else
         eatToken();
 }
@@ -16,7 +16,7 @@ void handleDef()
 void handleExtern()
 {
     if (parseExtern())
-        printf("Parsed an extern");
+        printf("Parsed an extern\n");
     else
         eatToken();
 }
@@ -24,7 +24,7 @@ void handleExtern()
 void handleExpr()
 {
     if (parseAnonymousFunction())
-        printf("Parsed an anonymous function");
+        printf("Parsed an anonymous function\n");
     else
         eatToken();
 }
