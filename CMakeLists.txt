@@ -16,4 +16,5 @@ add_executable(kang
 )
 target_include_directories(kang PRIVATE
     src/
+    3rdparty/
 )

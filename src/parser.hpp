@@ -6,20 +6,6 @@
 
 namespace kang
 {
-
-std::unique_ptr<ExprNode> logErr(const std::string& msg)
-{
-    fprintf(stderr, "Error: %s\n", msg.c_str());
-    return nullptr;
-}
-
-std::unique_ptr<SignatureNode> logErrSig(const std::string& msg)
-{
-    logErr(msg);
-    return nullptr;
-}
-
-
 std::unique_ptr<ExprNode> parse();
 std::unique_ptr<ExprNode> parseNumber()
 {
