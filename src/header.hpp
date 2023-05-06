@@ -69,6 +69,7 @@ void mainLoop()
         switch (kang::curToken)
         {
         case Token::MY_EOF:
+            myModule->print(llvm::outs(), nullptr);
             return;
         case ';':
             eatToken();
@@ -84,6 +85,5 @@ void mainLoop()
             break;
         }
     }
-    myModule->print(llvm::outs(), nullptr);
 }
 } // namespace kang
