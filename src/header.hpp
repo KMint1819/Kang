@@ -8,6 +8,7 @@ namespace kang
 
 static void initialize()
 {
+    std::ios_base::sync_with_stdio(true);
     myContext = std::make_unique<llvm::LLVMContext>();
     myModule = std::make_unique<llvm::Module>("KModule", *myContext);
     myBuilder = std::make_unique<llvm::IRBuilder<>>(*myContext);
@@ -19,9 +20,9 @@ static void handleDef()
     {
         if (auto *funcIR = funcAst->emit())
         {
-            fmt::print("Reading function definition: ");
+            printf("Reading DEF: ");
             funcIR->print(llvm::outs());
-            fmt::print("\n\n");
+            printf("\n\n");
         }
     }
     else
@@ -34,9 +35,9 @@ static void handleExtern()
     {
         if (auto *protoIR = protoAst->emit())
         {
-            fmt::print("Reading extern: ");
+            printf("Reading EXTERN: ");
             protoIR->print(llvm::outs());
-            fmt::print("\n\n");
+            printf("\n\n");
         }
     }
     else
@@ -49,9 +50,9 @@ static void handleExpr()
     {
         if (auto *fIR = fAst->emit())
         {
-            fmt::print("Reading extern: ");
+            printf("Reading EXPR: ");
             fIR->print(llvm::outs());
-            fmt::print("\n\n");
+            printf("\n\n");
 
             fIR->removeFromParent();
         }
@@ -83,5 +84,6 @@ void mainLoop()
             break;
         }
     }
+    myModule->print(llvm::outs(), nullptr);
 }
 } // namespace kang

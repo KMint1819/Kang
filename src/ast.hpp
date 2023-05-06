@@ -95,19 +95,19 @@ class BinaryOpNode : public ExprNode
     const std::unique_ptr<ExprNode> m_lhs, m_rhs;
 };
 
-std::unique_ptr<ExprNode> logErr(const std::string &msg)
+inline std::unique_ptr<ExprNode> logErr(const std::string &msg)
 {
     fprintf(stderr, "Error: %s\n", msg.c_str());
     return nullptr;
 }
 
-std::unique_ptr<SignatureNode> logErrSig(const std::string &msg)
+inline std::unique_ptr<SignatureNode> logErrSig(const std::string &msg)
 {
     logErr(msg);
     return nullptr;
 }
 
-llvm::Value *logErrV(const std::string &msg)
+inline llvm::Value *logErrV(const std::string &msg)
 {
     logErr(msg);
     return nullptr;
