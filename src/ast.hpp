@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <map>
 #include "llvm/ADT/APFloat.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
@@ -15,98 +11,103 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace kang
 {
 extern std::unique_ptr<llvm::LLVMContext> myContext;
 extern std::unique_ptr<llvm::IRBuilder<>> myBuilder;
 extern std::unique_ptr<llvm::Module> myModule;
-extern std::map<std::string, llvm::Value*> variables;
+extern std::map<std::string, llvm::Value *> variables;
 
 class ExprNode
 {
-public:
+  public:
     virtual ~ExprNode() = default;
-    virtual llvm::Value* emit() = 0;
+    virtual llvm::Value *emit() = 0;
 };
 
 class NumberNode : public ExprNode
 {
-public:
+  public:
     NumberNode(double val);
 
-private:
+  private:
     double m_val;
-    llvm::Value* emit() final override;
+    llvm::Value *emit() final override;
 };
 
 class VariableNode : public ExprNode
 {
-public:
-    VariableNode(const std::string& name);
-    llvm::Value* emit() final override;
+  public:
+    VariableNode(const std::string &name);
+    llvm::Value *emit() final override;
 
-private:
+  private:
     const std::string m_name;
 };
 
 class CallNode : public ExprNode
 {
-public:
-    CallNode(const std::string& calleeName, std::vector<std::unique_ptr<ExprNode>> args);
-    llvm::Value* emit() final override;
+  public:
+    CallNode(const std::string &calleeName, std::vector<std::unique_ptr<ExprNode>> args);
+    llvm::Value *emit() final override;
 
-private:
+  private:
     const std::string m_calleeName;
     const std::vector<std::unique_ptr<ExprNode>> m_args;
 };
 
-class SignatureNode : public ExprNode
+class SignatureNode
 {
-public:
-    SignatureNode(const std::string& funcName, std::vector<std::string> args);
-    llvm::Value* emit() final override;
+  public:
+    SignatureNode(const std::string &funcName, std::vector<std::string> args);
+    llvm::Function *emit();
+    const std::string &getName() const;
 
-private:
+  private:
     const std::string m_funcName;
     const std::vector<std::string> m_args;
 };
 
-class FunctionNode : public ExprNode
+class FunctionNode
 {
-public:
+  public:
     FunctionNode(std::unique_ptr<SignatureNode> signature, std::unique_ptr<ExprNode> body);
-    llvm::Value* emit() final override;
+    llvm::Function *emit();
 
-private:
+  private:
     std::unique_ptr<SignatureNode> m_signature;
     std::unique_ptr<ExprNode> m_body;
 };
 
 class BinaryOpNode : public ExprNode
 {
-public:
+  public:
     BinaryOpNode(char op, std::unique_ptr<ExprNode> lhs, std::unique_ptr<ExprNode> rhs);
-    llvm::Value* emit() final override;
+    llvm::Value *emit() final override;
 
-private:
+  private:
     char m_op;
     const std::unique_ptr<ExprNode> m_lhs, m_rhs;
 };
 
-std::unique_ptr<ExprNode> logErr(const std::string& msg)
+std::unique_ptr<ExprNode> logErr(const std::string &msg)
 {
     fprintf(stderr, "Error: %s\n", msg.c_str());
     return nullptr;
 }
 
-std::unique_ptr<SignatureNode> logErrSig(const std::string& msg)
+std::unique_ptr<SignatureNode> logErrSig(const std::string &msg)
 {
     logErr(msg);
     return nullptr;
 }
 
-llvm::Value* logErrV(const std::string& msg)
+llvm::Value *logErrV(const std::string &msg)
 {
     logErr(msg);
     return nullptr;

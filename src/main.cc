@@ -1,8 +1,10 @@
+#include "header.hpp"
 #include <cstdio>
 #include <iostream>
-#include "header.hpp"
 int main()
 {
+    kang::initialize();
+
     printf("Enter:> ");
     kang::eatToken();
 
